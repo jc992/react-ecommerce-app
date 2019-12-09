@@ -29,12 +29,10 @@ class SignIn extends Component {
         } catch (error) {
             console.error(error);
         }
-
     }
 
     handleChange = event => {
         const { value, name } = event.target;
-
         this.setState({ [name]: value })
     }
 
