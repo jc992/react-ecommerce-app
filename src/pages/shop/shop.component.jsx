@@ -19,18 +19,26 @@ class ShopPage extends Component {
         loading: true
     };
 
-    unsubscriberFromSnapshot = null;
+    unsubscribeFromSnapshot = null;
 
     componentDidMount() {
         const { updateCollections } = this.props;
         const collectionRef = firestore.collection('collections');
 
-        this.unsubscriberFromSnapshot = collectionRef.onSnapshot(async snapshot => {
-            const collectionsMap = convertCollectionsSnapshotToMap(snapshot);
-            updateCollections(collectionsMap);
-            this.setState({ loading: false })
-        })
-    }
+        //Native Firebase Promise Handling
+        // this.unsubscribeFromSnapshot = collectionRef.onSnapshot(async snapshot => {
+        //     const collectionsMap = convertCollectionsSnapshotToMap(snapshot);
+        //     updateCollections(collectionsMap);
+        //     this.setState({ loading: false });
+        // });
+
+        //Regular Promise Handling
+        collectionRef.get().then(snapshot => {
+            const collectionMap = convertCollectionsSnapshotToMap(snapshot);
+            updateCollections(collectionMap);
+            this.setState({ loading: false });
+        });
+    };
 
     render() {
         const { match } = this.props;
@@ -41,11 +49,11 @@ class ShopPage extends Component {
                 <Route path={`${match.path}/:collectionId`} render={(props) => <CollectionPageWithSpinner isLoading={loading} {...props} />} />
             </div>
         );
-    }
-}
+    };
+};
 
 const mapDispatchToProps = dispatch => ({
     updateCollections: collectionsMap => dispatch(updateCollections(collectionsMap))
-})
+});
 
 export default connect(null, mapDispatchToProps)(ShopPage);
