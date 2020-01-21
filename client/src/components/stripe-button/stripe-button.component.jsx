@@ -13,12 +13,14 @@ const StripeCheckoutButton = ({ price }) => {
                 amount: priceForStripe,
                 token
             }
-        }).then(response => {
-            alert('Payment Successful');
-        }).catch(error => {
-            console.log('Payment error: ', JSON.parse(error));
-            alert('There was an issue with your payment. Please make sure you use the provided card');
-        });
+        })
+            .then(response => {
+                alert('Payment Successful');
+            })
+            .catch(error => {
+                console.log('Payment error: ', JSON.parse(error));
+                alert('There was an issue with your payment. Please make sure you use the provided card');
+            });
     };
 
     return (
